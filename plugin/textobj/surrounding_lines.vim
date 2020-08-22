@@ -1,9 +1,7 @@
 " Reload guard {{{
 if &compatible || exists("g:loaded_textobj_surrounding_lines")
-    " todo
-    " finish
+    finish
 endif
-let g:loaded_textobj_surrounding_lines = 1
 " }}}
 
 " Options {{{
@@ -14,19 +12,15 @@ let g:textobj_surrounding_postfix = get(g:, "textobj_surrounding_postfix", "l")
 " }}}
 
 if g:textobj_surrounding_lines_enabled == 0
-    " todo
-    " finish
+    finish
 endif
         
 for i in g:textobj_surrounding_lines_numbers " {{{
     let key_sequence = g:textobj_surrounding_prefix . i . g:textobj_surrounding_postfix
-    " execute "onoremap " . key_sequence . " :\<C-u>call textobj#surrounding_lines#select_with_number(" . i . ")\<CR>"
+    " activate visual line mode, go i lines up, change visual mode cursor side, go i lines down
+    " Vimscript metaprogramming is so much fun u_U
     execute "onoremap " . key_sequence . " :\<C-u> normal! V" . i . 'ko' . i . 'j' . "\<CR>"
-    " execute "xnoremap " . key_sequence . " :\<C-u>call textobj#surrounding_lines#select_with_number(" . i . ")\<CR>"
-    execute "xnoremap " . key_sequence . " :\<C-u> normal! V" . i . 'ko' . i . 'j' . "\<CR>"
+    execute "xnoremap " . key_sequence . " \<Esc>:\<C-u> normal! V" . i . 'ko' . i . 'j' . "\<CR>"
 endfor " }}}
 
-function! textobj#surrounding_lines#select_with_number(number) " {{{
-    execute 'normal! V' . a:number . 'ko' . a:number . 'j'
-endfunction " }}}
-
+let g:loaded_textobj_surrounding_lines = 1
